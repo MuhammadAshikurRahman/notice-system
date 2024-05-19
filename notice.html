@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নোটিশ</title>
+    <!--Add font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif Bengali', serif;
+            margin: 0;
+            padding: 0;
+            color: black;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1.5px solid #0e0d0d;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .pdf-logo {
+            width: 20px;
+            cursor: pointer;
+        }
+        .col-sr {
+            width: 8px;
+        }
+        .col-details {
+            width: auto;
+        }
+        .col-date {
+            width: 100px;
+            min-width: 20px;
+        }
+        .col-download {
+            width: 15px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .pagination button:hover {
+            background-color: #0056b3;
+        }
+        .pagination button.active {
+            font-weight: bold;
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>নোটিশ</header>
+
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th class="col-sr">ক্রমিক</th>
+                <th class="col-details">শিরোনাম</th>
+                <th class="col-date">প্রকাশের তারিখ</th>
+                <th class="col-download">ডাউনলোড</th>
+            </tr>
+        </thead>
+        <tbody id="noticeTableBody">
+            <!-- Rows will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination">
+        <!-- Pagination buttons will be added here dynamically -->
+    </div>
+</div>
+
+<script>
+    // Array of notice objects
+    const notices = [
+        { sr: 1, details: "ডিপ্লোমা ইন ইঞ্জিনিয়ারিং শিক্ষাক্রমের ২য়, ৪র্থ ও ৬ষ্ঠ পর্ব ছাত্র-ছাত্রীদের ক্লাশ রুটিন প্রস্তুত কমিটি গঠন প্রসঙ্গে", date: "2024-05-19", pdf: "example1.pdf" },
+        { sr: 2, details: "কারিগরি ও বৃত্তিমূলক শিক্ষা সপ্তাহ-২০২৪ উদযাপন উপলক্ষ্যে “স্মার্ট বাংলাদেশ বির্নিমাণে কারিগরি শিক্ষার গুরুত্ব ও করণীয়” শীর্ষক সেমিনার সংক্রান্ত", date: "2024-05-18", pdf: "example2.pdf" },
+        { sr: 3, details: "শিক্ষকদের জন্য প্রশিক্ষণ কর্মশালা", date: "2024-05-17", pdf: "example3.pdf" },
+        { sr: 4, details: "বিশেষ সেমিনার আয়োজন প্রসঙ্গে", date: "2024-05-16", pdf: "example4.pdf" },
+        { sr: 5, details: "পরীক্ষার সময়সূচী ঘোষণা", date: "2024-05-15", pdf: "example5.pdf" },
+        { sr: 6, details: "গ্রাজুয়েশন ডে অনুষ্ঠানের সময়সূচী", date: "2024-05-14", pdf: "example6.pdf" },
+        { sr: 7, details: "অফিস ছুটির নোটিশ", date: "2024-05-13", pdf: "example7.pdf" },
+        { sr: 8, details: "নতুন পাঠক্রম সূচি", date: "2024-05-12", pdf: "example8.pdf" },
+        { sr: 9, details: "প্রাক-পরীক্ষার প্রস্তুতি ক্লাস", date: "2024-05-11", pdf: "example9.pdf" },
+        { sr: 10, details: "লাইব্রেরি বই জমাদানের শেষ তারিখ", date: "2024-05-10", pdf: "example10.pdf" },
+        { sr: 11, details: "ইন্টার্নশিপ প্রোগ্রাম শুরুর নোটিশ", date: "2024-05-09", pdf: "example11.pdf" },
+        { sr: 12, details: "শীতকালীন ছুটির নোটিশ", date: "2024-05-08", pdf: "example12.pdf" },
+        { sr: 13, details: "নতুন ছাত্র-ছাত্রীদের ওরিয়েন্টেশন প্রোগ্রাম", date: "2024-05-07", pdf: "example13.pdf" },
+        { sr: 14, details: "শিক্ষকদের জন্য সম্মেলন", date: "2024-05-06", pdf: "example14.pdf" },
+        { sr: 15, details: "ক্যাম্পাস সংস্কার কাজ", date: "2024-05-05", pdf: "example15.pdf" },
+        { sr: 16, details: "স্টুডেন্ট কাউন্সিল নির্বাচন", date: "2024-05-04", pdf: "example16.pdf" },
+        { sr: 17, details: "পরীক্ষার ফলাফল প্রকাশ", date: "2024-05-03", pdf: "example17.pdf" },
+        { sr: 18, details: "শিক্ষা সফরের নোটিশ", date: "2024-05-02", pdf: "example18.pdf" },
+        { sr: 19, details: "ছাত্র-ছাত্রীদের হেলথ ক্যাম্প", date: "2024-05-01", pdf: "example19.pdf" },
+        { sr: 20, details: "ই-বুকস এর তালিকা প্রকাশ", date: "2024-04-30", pdf: "example20.pdf" },
+        { sr: 21, details: "গ্রীষ্মকালীন কোর্সের রেজিস্ট্রেশন", date: "2024-04-29", pdf: "example21.pdf" },
+        { sr: 22, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 23, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 24, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 25, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 26, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 27, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 28, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 29, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 30, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 31, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 32, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 33, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 34, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 35, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" },
+        { sr: 36, details: "বিশেষ প্রজেক্ট সাবমিশন", date: "2024-04-28", pdf: "example22.pdf" }
+
+        // add more notice
+    ];
+
+    // Number of notices to display per page
+    const noticesPerPage = 10;
+    // Current page number
+    let currentPage = 1;
+
+
+    // Function to display notices for the given page
+    function displayNotices(page) {
+        const tableBody = document.getElementById('noticeTableBody');
+        tableBody.innerHTML = ''; // Clear the table body
+
+
+         // Calculate the start and end index for the notices to display
+        const start = (page - 1) * noticesPerPage;
+        const end = start + noticesPerPage;
+        const paginatedNotices = notices.slice().reverse().slice(start, end);
+        
+
+         // Add the notices to the table body
+        paginatedNotices.forEach(notice => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td class="col-sr">${notice.sr}</td>
+                <td class="col-details">${notice.details}</td>
+                <td class="col-date">${notice.date}</td>
+                <td class="col-download"><a href="${notice.pdf}" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF" class="pdf-logo"></a></td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    // Function to set up pagination buttons
+    function setupPagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = ''; // Clear pagination
+        
+
+         // Calculate the number of pages needed
+        const pageCount = Math.ceil(notices.length / noticesPerPage);
+
+
+         // Create pagination buttons
+        for (let i = 1; i <= pageCount; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            if (i === currentPage) {
+                button.style.fontWeight = 'bold';
+            }
+
+            // Add click event to pagination buttons
+            button.addEventListener('click', () => {
+                currentPage = i;
+                displayNotices(currentPage);
+                setupPagination();
+            });
+            pagination.appendChild(button);
+        }
+    }
+
+
+     // Initial display of notices and pagination setup
+    document.addEventListener('DOMContentLoaded', () => {
+        displayNotices(currentPage);
+        setupPagination();
+    });
+</script>
+
+</body>
+</html>
